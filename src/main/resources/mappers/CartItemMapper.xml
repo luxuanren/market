@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mappers.CartItemMapper">
+    <resultMap id="cartItemMap" type="com.study.model.CartItem">
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <association column="g_id" property="goods" select="com.study.mappers.GoodsMapper.selectByGoodsId"/>
+    </resultMap>
+    <resultMap id="CartListMap" type="java.util.ArrayList">
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <collection property="goods" column="g_id" select="com.study.mappers.GoodsMapper.selectByGoodsId"/>
+    </resultMap>
+    <sql id="cartItemColumnList">
+        g_id, num
+    </sql>
+    <select id="selectCartByUserId" parameterType="INTEGER" resultMap="CartListMap">
+        SELECT g_id,num
+        FROM cart
+        WHERE u_id = #{userId, jdbcType=INTEGER}
+    </select>
+    <select id="selectByPrimaryKey" resultMap="cartItemMap">
+        SELECT
+        <include refid="cartItemColumnList"/>
+        FROM cart
+        WHERE u_id = #{userId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM cart
+        WHERE g_id = #{goodsId,jdbcType=INTEGER} AND u_id = #{userId,jdbcType=INTEGER}
+    </delete>
+    <insert id="saveCartItem" parameterType="com.study.model.CartItem">
+        INSERT INTO cart (u_id, g_id, num)
+        VALUES (#{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{num,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.study.model.CartItem">
+        UPDATE cart
+        SET num = #{num,jdbcType=VARCHAR}
+        WHERE g_id = #{goodsId,jdbcType=INTEGER} AND u_id = #{userId,jdbcType=INTEGER}
+    </update>
+</mapper>

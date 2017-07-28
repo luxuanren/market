@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mappers.MarkMapper">
+    <resultMap id="markMap" type="com.study.model.Goods">
+        <id column="g_id" jdbcType="INTEGER" property="id" />
+        <result column="g_name" jdbcType="VARCHAR" property="name" />
+        <result column="g_price" jdbcType="DOUBLE" property="price" />
+        <result column="g_inventory" jdbcType="INTEGER" property="inventory" />
+        <result column="g_status" jdbcType="INTEGER" property="status" typeHandler="com.study.handlers.GoodsStatusEnumHandler" />
+        <result column="g_title" jdbcType="VARCHAR" property="title" />
+        <result column="g_detail" jdbcType="VARCHAR" property="detail" />
+    </resultMap>
+    <select id="getMarkListByUserId" resultMap="markMap">
+      SELECT * FROM  goods
+      WHERE g_id IN (
+          SELECT g_id FROM mark
+          WHERE u_id = #{userId,jdbcType=INTEGER}
+      )
+    </select>
+    <delete id="deleteMarkByPrimaryKey">
+        DELETE FROM mark
+        WHERE u_id = #{userId,jdbcType=INTEGER} AND g_id = #{goodsId,jdbcType=INTEGER}
+    </delete>
+    <insert id="saveUserMark">
+        INSERT INTO mark VALUES (#{userId}, #{goodsId})
+    </insert>
+</mapper>

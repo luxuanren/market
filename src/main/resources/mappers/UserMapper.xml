@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mappers.UserMapper">
+    <resultMap id="userMap" type="com.study.model.User">
+        <id column="u_id" jdbcType="INTEGER" property="id"/>
+        <result column="u_name" jdbcType="VARCHAR" property="name"/>
+        <result column="u_email" jdbcType="VARCHAR" property="email"/>
+        <result column="u_age" jdbcType="INTEGER" property="age"/>
+        <result column="u_sex" jdbcType="INTEGER" property="sex" typeHandler="com.study.handlers.SexEnumHandler"/>
+        <result column="u_password" jdbcType="VARCHAR" property="password"/>
+        <result column="u_level" jdbcType="INTEGER" property="level" typeHandler="com.study.handlers.UserLevelEnumHandler"/>
+        <result column="u_integral" jdbcType="DOUBLE" property="integral"/>
+        <collection property="cartList" column="u_id" select="com.study.mappers.CartItemMapper.selectByPrimaryKey"/>
+        <collection property="markList" column="u_id" select="com.study.mappers.MarkMapper.getMarkListByUserId"/>
+        <collection property="orderList" column="u_id" select="com.study.mappers.OrderMapper.getOrderListByUserId"/>
+    </resultMap>
+    <sql id="userColumnList">
+        u_id, u_name, u_email, u_sex, u_age, u_password, u_level, u_integral
+    </sql>
+    <select id="getUserByEmail" resultMap="userMap">
+        SELECT
+        <include refid="userColumnList"/>
+        FROM user
+        WHERE u_email = #{email,jdbcType=VARCHAR} AND u_password = #{password, jdbcType=VARCHAR}
+    </select>
+    <select id="getUserByName" resultMap="userMap">
+        SELECT
+        <include refid="userColumnList"/>
+        FROM user
+        WHERE u_name = #{username,jdbcType=VARCHAR} AND u_password = #{password, jdbcType=VARCHAR}
+    </select>
+    <insert id="saveUser" parameterType="com.study.model.User">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            u_id,
+            <if test="name != null">u_name,</if>
+            <if test="age != null">u_age,</if>
+            <if test="sex != null">u_sex,</if>
+            <if test="email != null">u_email,</if>
+            <if test="password != null">u_password,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=INTEGER},
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="age != null">#{age,jdbcType=INTEGER},</if>
+            <if test="sex != null">#{sex,jdbcType=INTEGER,typeHandler=com.study.handlers.SexEnumHandler},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <select id="verifyPassword" resultType="java.lang.Integer">
+        SELECT COUNT (*)
+        FROM user
+        WHERE u_id = #{userId} AND u_password = #{password}
+    </select>
+    <select id="verifyEmail" resultType="java.lang.Integer">
+        SELECT COUNT (*)
+        FROM user
+        WHERE u_email = #{email}
+    </select>
+    <delete id="deleteUserById">
+        DELETE FROM user WHERE u_id = #{u_id}
+    </delete>
+</mapper>
