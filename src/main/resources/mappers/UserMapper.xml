@@ -11,7 +11,7 @@
         <result column="u_level" jdbcType="INTEGER" property="level" typeHandler="com.study.handlers.UserLevelEnumHandler"/>
         <result column="u_integral" jdbcType="DOUBLE" property="integral"/>
         <collection property="cartList" column="u_id" select="com.study.mappers.CartItemMapper.selectByPrimaryKey"/>
-        <collection property="markList" column="u_id" select="com.study.mappers.MarkMapper.getMarkListByUserId"/>
+        <collection property="markList" column="u_id" select="com.study.mappers.MarkMapper.getMarkListByUserId" />
         <collection property="orderList" column="u_id" select="com.study.mappers.OrderMapper.getOrderListByUserId"/>
     </resultMap>
     <sql id="userColumnList">

@@ -3,19 +3,23 @@
 <mapper namespace="com.study.mappers.OrderMapper">
     <resultMap id="orderMap" type="com.study.model.Order">
         <result column="o_id" jdbcType="INTEGER" property="id" />
-        <result column="index" jdbcType="VARCHAR" property="index" />
-        <result column="sum" jdbcType="DOUBLE" property="sum" />
-        <result column="g_num" jdbcType="INTEGER" property="goodsNum" />
-        <result column="o_status" jdbcType="INTEGER" property="status" typeHandler="com.study.handlers.OrderStatusEnumHandler" />
         <result column="o_time" jdbcType="TIMESTAMP" property="orderTime" />
-        <association property="goods" column="g_id" select="com.study.mappers.GoodsMapper.selectByGoodsId"/>
+        <collection property="orderItemList" column="{userId=u_id,orderId=o_id}" select="selectOrders"/>
     </resultMap>
-    <select id="getOrderListByUserId" resultMap="orderMap">
-      SELECT * FROM  orders
-      WHERE g_id IN (
-          SELECT g_id FROM mark
-          WHERE u_id = #{userId,jdbcType=INTEGER}
-      )
+    <resultMap id="orderItemMap" type="com.study.model.OrderItem">
+        <result column="o_index" jdbcType="VARCHAR" property="index" />
+        <result column="g_num" jdbcType="INTEGER" property="goodsNum" />
+        <result column="o_status" jdbcType="INTEGER" property="orderStatusEnum" typeHandler="com.study.handlers.OrderStatusEnumHandler" />
+        <association column="g_id" property="goods" select="com.study.mappers.GoodsMapper.selectByGoodsId"/>
+    </resultMap>
+    <select id="getOrderListByUserId" resultMap="orderMap" parameterType="INTEGER">
+        SELECT * FROM  order_list
+        WHERE u_id = #{userId}
+    </select>
+    <select id="selectOrders" resultMap="orderItemMap">
+        SELECT *
+        FROM orders
+        WHERE u_id = #{userId} AND o_id = #{orderId}
     </select>
     <delete id="deleteMarkByPrimaryKey">
         DELETE FROM mark

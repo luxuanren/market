@@ -53,8 +53,10 @@ DROP TABLE IF EXISTS `evaluation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `evaluation` (
   `e_id` int(11) NOT NULL AUTO_INCREMENT,
-  `o_id` int(11) NOT NULL DEFAULT '1',
+  `o_id` int(11) NOT NULL,
+  `o_index` int(11) NOT NULL DEFAULT '1',
   `u_id` int(11) NOT NULL,
+  `u_name` varchar(45) NOT NULL,
   `g_id` int(11) NOT NULL,
   `e_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `e_info` varchar(100) NOT NULL,
@@ -65,7 +67,7 @@ CREATE TABLE `evaluation` (
   CONSTRAINT `eval_gid` FOREIGN KEY (`g_id`) REFERENCES `goods` (`g_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `eval_oid` FOREIGN KEY (`o_id`) REFERENCES `orders` (`o_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `eval_uid` FOREIGN KEY (`u_id`) REFERENCES `user` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,6 +76,7 @@ CREATE TABLE `evaluation` (
 
 LOCK TABLES `evaluation` WRITE;
 /*!40000 ALTER TABLE `evaluation` DISABLE KEYS */;
+INSERT INTO `evaluation` VALUES (1,1,1,1000,'luxuanren',10000,'2017-08-03 03:23:48','very good');
 /*!40000 ALTER TABLE `evaluation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,6 +139,31 @@ INSERT INTO `mark` VALUES (1,1000,10000),(2,1000,10001);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `order_list`
+--
+
+DROP TABLE IF EXISTS `order_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_list` (
+  `u_id` int(11) NOT NULL AUTO_INCREMENT,
+  `o_id` int(11) NOT NULL,
+  `o_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`u_id`,`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_list`
+--
+
+LOCK TABLES `order_list` WRITE;
+/*!40000 ALTER TABLE `order_list` DISABLE KEYS */;
+INSERT INTO `order_list` VALUES (1000,1,'2017-08-03 03:15:28'),(1000,3,'2017-08-03 03:15:28'),(1001,2,'2017-08-03 03:15:28');
+/*!40000 ALTER TABLE `order_list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `orders`
 --
 
@@ -145,12 +173,16 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `o_id` int(11) NOT NULL AUTO_INCREMENT,
   `u_id` int(11) NOT NULL,
-  `o_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `o_info` varchar(300) NOT NULL,
-  PRIMARY KEY (`o_id`),
+  `g_id` int(11) NOT NULL,
+  `g_num` int(11) NOT NULL,
+  `o_index` int(11) NOT NULL,
+  `o_status` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`o_id`,`u_id`,`o_index`),
   KEY `u_id_idx` (`u_id`),
-  CONSTRAINT `uid_order` FOREIGN KEY (`u_id`) REFERENCES `user` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10001001 DEFAULT CHARSET=utf8;
+  KEY `order_gid_idx` (`g_id`),
+  CONSTRAINT `order_gid` FOREIGN KEY (`g_id`) REFERENCES `goods` (`g_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `order_uid` FOREIGN KEY (`u_id`) REFERENCES `user` (`u_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +191,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (10001000,1000,'2016-11-22 15:56:34','[10001:1:1, 10002:1:0]');
+INSERT INTO `orders` VALUES (1,1000,10000,1,1,0),(1,1000,10001,1,2,0),(2,1001,10000,1,1,0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +212,7 @@ CREATE TABLE `user` (
   `u_level` int(11) DEFAULT '1',
   `u_integral` double DEFAULT '0',
   PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1029 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +221,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1000,'luxuanren','867773467@qq.com',24,1,'123',1,10),(1008,'user1','user1@test.com',2,1,'123',1,0);
+INSERT INTO `user` VALUES (1000,'luxuanren','867773467@qq.com',24,1,'123',1,10),(1001,'user1','user1@test.com',2,1,'123',1,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -202,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-02 14:07:21
+-- Dump completed on 2017-08-03 12:40:30

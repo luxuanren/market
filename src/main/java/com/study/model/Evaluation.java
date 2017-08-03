@@ -1,19 +1,40 @@
 package com.study.model;
 
+import java.util.Date;
+
 public class Evaluation {
+    private Integer id;
+    private Integer orderId;
+    private Integer orderIndex;
+    private Integer userId;
+    private String username;
     private Integer goodsId;
+    private Date evalTime;
+    private String evalInfo;
 
-    private String gName;
+    public Integer getId() {
+        return id;
+    }
 
-    private Double gPrice;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    private Integer gInventory;
+    public Integer getOrderIndex() {
+        return orderIndex;
+    }
 
-    private Integer gStatus;
+    public void setOrderIndex(Integer orderIndex) {
+        this.orderIndex = orderIndex;
+    }
 
-    private String gTitle;
+    public Integer getUserId() {
+        return userId;
+    }
 
-    private String gDetail;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getGoodsId() {
         return goodsId;
@@ -23,51 +44,48 @@ public class Evaluation {
         this.goodsId = goodsId;
     }
 
-    public String getgName() {
-        return gName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setgName(String gName) {
-        this.gName = gName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Double getgPrice() {
-        return gPrice;
+    public Date getEvalTime() {
+        return evalTime;
     }
 
-    public void setgPrice(Double gPrice) {
-        this.gPrice = gPrice;
+    public void setEvalTime(Date evalTime) {
+        this.evalTime = evalTime;
     }
 
-    public Integer getgInventory() {
-        return gInventory;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setgInventory(Integer gInventory) {
-        this.gInventory = gInventory;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public Integer getgStatus() {
-        return gStatus;
+    public String getEvalInfo() {
+        return evalInfo;
     }
 
-    public void setgStatus(Integer gStatus) {
-        this.gStatus = gStatus;
+    public void setEvalInfo(String evalInfo) {
+        this.evalInfo = evalInfo;
     }
 
-    public String getgTitle() {
-        return gTitle;
-    }
-
-    public void setgTitle(String gTitle) {
-        this.gTitle = gTitle;
-    }
-
-    public String getgDetail() {
-        return gDetail;
-    }
-
-    public void setgDetail(String gDetail) {
-        this.gDetail = gDetail;
+    @Override public String toString() {
+        return "Evaluation{" +
+                "id=" + id +
+                ", orderId=" + orderId +
+                ", orderIndex=" + orderIndex +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
+                ", goodsId=" + goodsId +
+                ", evalTime=" + evalTime +
+                ", evalInfo='" + evalInfo + '\'' +
+                '}';
     }
 }

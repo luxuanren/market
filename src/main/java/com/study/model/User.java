@@ -17,6 +17,15 @@ public class User {
     private Double integral;
     private List<CartItem> cartList;
     private List<Goods> markList;
+    private List<Order> orderList;
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
 
     @Override public boolean equals(Object o) {
         if (this == o)

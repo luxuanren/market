@@ -3,26 +3,12 @@ package com.study.model;
 import com.study.enums.OrderStatusEnum;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private Integer id;
-    /**
-     * sub order index, keep one goods in a sub order
-     */
-    private Integer index;
-    private Integer sum;
-    private Goods goods;
-    private Integer goodsNum;
-    private OrderStatusEnum orderStatusEnum;
+    private List<OrderItem> orderItemList;
     private Date orderTime;
-
-    public OrderStatusEnum getOrderStatusEnum() {
-        return orderStatusEnum;
-    }
-
-    public void setOrderStatusEnum(OrderStatusEnum orderStatusEnum) {
-        this.orderStatusEnum = orderStatusEnum;
-    }
 
     public Integer getId() {
         return id;
@@ -32,36 +18,12 @@ public class Order {
         this.id = id;
     }
 
-    public Integer getIndex() {
-        return index;
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public Integer getSum() {
-        return sum;
-    }
-
-    public void setSum(Integer sum) {
-        this.sum = sum;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public Integer getGoodsNum() {
-        return goodsNum;
-    }
-
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 
     public Date getOrderTime() {
